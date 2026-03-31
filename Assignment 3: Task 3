@@ -1,12 +1,12 @@
-Fingerprint Generation
+# Task 3: Fingerprint Generation
 
-In this task, molecular fingerprints were generated from SMILES representations of compounds using PaDELPy.
-These fingerprints encode chemical structures into numerical vectors suitable for machine learning and QSAR modeling.
+## Method Used
+Molecular fingerprints were generated using PaDELPy (Python wrapper for PaDEL descriptor software).
 
-Input Preparation
+## Input Preparation
+SMILES data was extracted and converted into `.smi` format required for PaDEL:
 
-The SMILES data was extracted and converted into .smi format required by PaDEL:
-
+```python
 data = df[['canonical_smiles', 'molecule_chembl_id']]
 
 data['canonical_smiles'].to_csv(
@@ -14,19 +14,31 @@ data['canonical_smiles'].to_csv(
     index=None,
     header=None
 )
-PubChem Fingerprints
-Code
+```
+
+## Generated Fingerprints
+
+### PubChem Fingerprints
+
+```python
+from padelpy import padeldescriptor
+
 padeldescriptor(
     mol_dir="smiles_chembl.smi",
     d_file="pubchem_fingerprints.csv",
     fingerprints=True,
     retainorder=True
 )
-Output
-File: pubchem_fingerprints.csv
-Feature size: 881 bits
-Substructure Fingerprints
-Code
+```
+
+- Output file: `pubchem_fingerprints.csv`  
+- Feature size: **881 bits**
+
+---
+
+### Substructure Fingerprints
+
+```python
 Substruc_fp = "SubstructureFingerprinter.xml"
 
 padeldescriptor(
@@ -36,24 +48,19 @@ padeldescriptor(
     descriptortypes=Substruc_fp,
     retainorder=True
 )
-Output
-File: Substructure_fingerprints.csv
-Feature size: ~307 bits
-Why Fingerprints Are Important
+```
 
-Molecular fingerprints transform chemical structures into binary feature vectors, which enables:
+- Output file: `Substructure_fingerprints.csv`  
+- Feature size: **~307 bits**
 
-Machine learning model training (QSAR)
-Chemical similarity comparison
-Efficient representation of molecular features
-Tool Used
-PaDELPy
-Reasons for Selection:
-Widely used in cheminformatics workflows
-Generates standardized and reproducible fingerprints
-Supports multiple fingerprint types (PubChem, Substructure)
-Easily integrates with Python pipelines
-Summary
-PubChem fingerprints (881 bits) successfully generated
-Substructure fingerprints (~307 bits) successfully generated
-Data saved as CSV files for machine learning analysis
+---
+
+## Workflow Summary
+- Extract SMILES and convert to `.smi` format  
+- Generate PubChem fingerprints  
+- Generate Substructure fingerprints  
+- Combine fingerprints with bioactivity data  
+- Save final dataset as `QSAR_dataset.csv`  
+
+## Outcome
+Fingerprint features were successfully generated and prepared for machine learning and QSAR modeling.
